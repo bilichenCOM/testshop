@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Signin</title>
+    <title>Signup</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" >
 </head>
 <body class="bg-dark">
@@ -13,7 +13,9 @@
 
 <div class="container">
     <spring:form modelAttribute="user" action="/testshop/signin" method="post" class="form-signin">
-        <h1 class="h3 mb-3 font-weight-normal">Please login</h1>
+        <h1 class="h3 mb-3 font-weight-normal">New user</h1>
+        <label for="name" class="sr-only">Full name</label>
+        <spring:input path="name" id="name" class="form-control" placeholder="please enter your name" required="true" />
         <label for="email" class="sr-only">Email</label>
         <spring:input path="email" id="email" class="form-control" placeholder="your email" required="true"/>
         <label for="password" class="sr-only">Password</label>
