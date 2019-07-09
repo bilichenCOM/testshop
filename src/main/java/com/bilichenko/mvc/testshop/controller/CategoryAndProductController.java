@@ -1,19 +1,26 @@
 package com.bilichenko.mvc.testshop.controller;
 
+import com.bilichenko.mvc.testshop.model.Product;
 import com.bilichenko.mvc.testshop.service.CategoryService;
+import com.bilichenko.mvc.testshop.service.ProductService;
 import com.bilichenko.mvc.testshop.service.exceptions.CategoryNotFoundException;
+import com.bilichenko.mvc.testshop.service.exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class CategoryController {
+public class CategoryAndProductController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ProductService productService;
 
     @RequestMapping(value = "/categories", method = RequestMethod.GET)
     public ModelAndView categories(ModelAndView mav) {
@@ -27,6 +34,17 @@ public class CategoryController {
         mav.addObject("category", categoryService.getById(id)
             .orElseThrow(() -> new CategoryNotFoundException()));
         mav.setViewName("category");
+        return mav;
+    }
+
+    @RequestMapping(value = "/categories/category/product")
+    public ModelAndView productById(@RequestParam Long id, ModelAndView mav) {
+        Product product = productService.getById(id).
+                orElseThrow(() -> new ProductNotFoundException());
+        mav.addObject("product", product);
+        Long categoryId = product.getCategory().getId();
+        mav.addObject("category", categoryService.getById(categoryId).get());
+        mav.setViewName("product");
         return mav;
     }
 }

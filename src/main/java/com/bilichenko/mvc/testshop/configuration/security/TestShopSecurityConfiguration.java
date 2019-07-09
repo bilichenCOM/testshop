@@ -29,16 +29,19 @@ public class TestShopSecurityConfiguration extends WebSecurityConfigurerAdapter 
         daoAuth.setPasswordEncoder(encoder);
         return daoAuth;
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/user/**").authenticated()
-                .anyRequest().permitAll()
-            .and()
-                .formLogin().loginPage("/signin")
-                .defaultSuccessUrl("/categories")
-                .usernameParameter("email");
+                .antMatchers("/welcome", "/signup").permitAll()
+                .antMatchers("/resources/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+            .formLogin().loginPage("/signin")
+                .usernameParameter("email")
+                .permitAll()
+                .defaultSuccessUrl("/categories");
     }
 
     @Autowired

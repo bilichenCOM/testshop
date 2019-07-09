@@ -13,5 +13,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findAll();
 
     @EntityGraph("Category.products")
-    Optional<Category> findById(Long aLong);
+    Optional<Category> findById(Long id);
 }

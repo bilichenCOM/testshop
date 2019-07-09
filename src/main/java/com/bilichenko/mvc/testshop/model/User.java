@@ -1,11 +1,7 @@
 package com.bilichenko.mvc.testshop.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,18 +15,29 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private Double balance;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "fk_user_id"),
+            inverseJoinColumns = @JoinColumn(name = "fk_role_id"))
     private List<Role> roles;
 
-    public User() {}
+    @OneToOne
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
-    public User(Long id, String name, String email, String password, List<Role> roles) {
-        this.id = id;
+    public User() {
+        roles = new ArrayList<>();
+    }
+
+    public User(String name, String email, String password, Double balance, List<Role> roles, Cart cart) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.balance = balance;
         this.roles = roles;
+        this.cart = cart;
     }
 
     public Long getId() {
@@ -73,23 +80,38 @@ public class User {
         this.roles = roles;
     }
 
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return Objects.equals(id, user.id) &&
                 Objects.equals(name, user.name) &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(password, user.password) &&
-                Objects.equals(roles, user.roles);
+                Objects.equals(roles, user.roles) &&
+                Objects.equals(cart, user.cart);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, password, roles);
+        return Objects.hash(id, name, email, password, roles, cart);
     }
 
     @Override
@@ -100,6 +122,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
+                ", cart=" + cart +
                 '}';
     }
 }

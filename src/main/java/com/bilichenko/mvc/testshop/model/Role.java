@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,16 +21,10 @@ public class Role {
     private Long id;
     private String name;
 
-    @ManyToMany
-    @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "fk_role"),
-            inverseJoinColumns = @JoinColumn(name = "fk_user"))
-    private List<User> users;
-
-    public Role(Long id, String name, List<User> users) {
+    public Role() {}
+    public Role(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.users = users;
     }
 
     public Long getId() {
@@ -48,29 +43,26 @@ public class Role {
         this.name = name;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public static Role ofUser() {
+        return new Role(1L, "USER");
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public static Role ofAdmin() {
+        return new Role(2L, "ADMIN");
     }
 
-    @Override
+      @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Role role = (Role) o;
         return Objects.equals(id, role.id) &&
-                Objects.equals(name, role.name) &&
-                Objects.equals(users, role.users);
+                Objects.equals(name, role.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, users);
+        return Objects.hash(id, name);
     }
 
     @Override
@@ -78,7 +70,6 @@ public class Role {
         return "Role{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", users=" + users +
                 '}';
     }
 }
