@@ -48,7 +48,7 @@ public class Role {
     }
 
     public static Role ofAdmin() {
-        return new Role(2L, "ADMIN");
+       return new Role(2L, "ADMIN");
     }
 
       @Override

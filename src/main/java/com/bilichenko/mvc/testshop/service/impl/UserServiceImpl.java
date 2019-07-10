@@ -32,10 +32,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return userRepository.findByEmail(s)
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email).get();
+        System.out.println(user.getPassword());
+        return userRepository.findByEmail(email)
                 .map(u -> new org.springframework.security.core.userdetails.User(
-                        u.getName(),
+                        u.getEmail(),
                         u.getPassword(),
                         authorityList(u)
                 ))

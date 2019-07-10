@@ -1,6 +1,18 @@
 package com.bilichenko.mvc.testshop.model;
 
-import javax.persistence.*;
+import com.bilichenko.mvc.testshop.controller.payloads.UserPayload;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,18 +29,19 @@ public class User {
     private String password;
     private Double balance;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "fk_user_id"),
             inverseJoinColumns = @JoinColumn(name = "fk_role_id"))
     private List<Role> roles;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
     public User() {
         roles = new ArrayList<>();
+        cart = new Cart();
     }
 
     public User(String name, String email, String password, Double balance, List<Role> roles, Cart cart) {
@@ -96,6 +109,18 @@ public class User {
         this.balance = balance;
     }
 
+    public static User ofPayload(UserPayload payload) {
+        User user = new User();
+        user.setName(payload.getName());
+        user.setEmail(payload.getEmail());
+        user.setPassword(payload.getFirstPassword());
+        return user;
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -122,7 +147,6 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
-                ", cart=" + cart +
                 '}';
     }
 }

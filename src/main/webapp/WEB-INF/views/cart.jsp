@@ -18,25 +18,30 @@
     </security:authorize>
 </div>
 
-<h2>${category.name.toUpperCase()}</h2>
-    <div>${category.description}</div>
-    <table>
-        <c:forEach var="product" items="${category.products}">
-            <tr>
-                <td>
-                    <img src="<c:url value="${product.imageUrl}"/>" alt="photo" width="200" height="150">
-                </td>
-                <td>
-                    <a href="<c:url value="/categories/category/product?id=${product.id}"/>">${product.name}</a>
-                </td>
-                <td>
-                    <div>Price: ${product.price}</div>
-                </td>
-                <td>
-                    <a href="<c:url value="/cart/add/product?id=${product.id}"/>"><button>Add to cart!</button></a>
-                </td>
-            </tr>
-        </c:forEach>
-    </table>
+<h2>Your cart items:</h2>
+<div>${cartMessage}</div>
+<table>
+    <c:forEach var="product" items="${cart.products}">
+        <td>
+            <img src="<c:url value="${product.imageUrl}"/>" height="200" width="150" alt="${product.name} photo">
+        </td>
+        <td>
+            <div>${product.name} from: ${product.category.name}</div>
+        </td>
+        <td>
+            <div>Price: ${product.price}&dollar;</div>
+        </td>
+        <td>
+            <a href="<c:url value="/cart/remove/product?id=${product.id}"/>">x</a>
+        </td>
+    </c:forEach>
+</table>
+
+<h2>Total price:</h2><div>${cart.getTotalPrice()}</div>
+
+<a href="<c:url value="/purchase/cart?id=${cart.id}"/>">
+    <button>Purchase all!</button>
+</a>
+
 </body>
 </html>

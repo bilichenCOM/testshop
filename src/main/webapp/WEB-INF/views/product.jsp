@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
     <title>Categories</title>
@@ -11,12 +12,14 @@
 <nav><a href="<c:url value="/welcome"/>">Welcome</a> | <a href="<c:url value="/categories"/>">Categories</a> |
     <a href="<c:url value="/signin"/>">Signin</a> | <a href="<c:url value="/signup"/>">Signup</a> </nav>
 
-<%-- place for cart --%>
-<div><a href="<c:url value="/cart"/>">Cart: ${cart.products.size()} items</a></div>
-<%----%>
+<div align="right">
+    <security:authorize access="isAuthenticated()">
+        logged as <security:authentication property="principal.username"/>
+    </security:authorize>
+</div>
 
 <h2>${category.name.toUpperCase()} &gt; ${product.name.toUpperCase()}</h2>
-<div><img src="<c:url value="${product.imageUrl}"/>" weight="300" height="400"/>"></div>
+<div><img src="<c:url value="${product.imageUrl}"/>" weight="300" height="400"/></div>
 
 <%-- here should be some status message to inform customer--%>
     <div>${message}</div>

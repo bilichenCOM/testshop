@@ -2,11 +2,15 @@ package com.bilichenko.mvc.testshop.model;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "carts")
+@NamedEntityGraph(name = "Cart.products",
+        attributeNodes = @NamedAttributeNode("products"))
 public class Cart {
 
     @Id
@@ -16,17 +20,17 @@ public class Cart {
     @OneToOne(mappedBy = "cart")
     private User user;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(name = "carts_products",
             joinColumns = @JoinColumn(name = "fk_cart_id"),
             inverseJoinColumns = @JoinColumn(name = "fk_product_id"))
-    private List<Product> products;
+    private Set<Product> products;
 
     public Cart() {
-        products = new ArrayList<>();
+        products = new HashSet<>();
     }
 
-    public Cart(User user, List<Product> products) {
+    public Cart(User user, Set<Product> products) {
         this.user = user;
         this.products = products;
     }
@@ -47,11 +51,11 @@ public class Cart {
         this.user = user;
     }
 
-    public List<Product> getProducts() {
+    public Set<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(Set<Product> products) {
         this.products = products;
     }
 
@@ -61,6 +65,13 @@ public class Cart {
 
     public void removeProduct(Product product) {
         this.products.remove(product);
+    }
+
+    public Double getTotalPrice() {
+        return this.products.stream()
+                .map(p -> p.getPrice())
+                .reduce((pr1, pr2) -> pr1 + pr2)
+                .orElse(0.0);
     }
 
     @Override

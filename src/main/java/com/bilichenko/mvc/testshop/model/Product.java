@@ -88,17 +88,10 @@ public class Product {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return Objects.equals(id, product.id) &&
-                Objects.equals(name, product.name) &&
-                Objects.equals(description, product.description) &&
-                Objects.equals(price, product.price) &&
-                Objects.equals(category, product.category) &&
-                Objects.equals(imageUrl, product.imageUrl);
+        return Objects.equals(id, product.id);
     }
 
     @Override
@@ -113,7 +106,6 @@ public class Product {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
-                ", category=" + category +
                 ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
