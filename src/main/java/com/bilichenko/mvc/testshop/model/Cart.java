@@ -24,13 +24,13 @@ public class Cart {
     @JoinTable(name = "carts_products",
             joinColumns = @JoinColumn(name = "fk_cart_id"),
             inverseJoinColumns = @JoinColumn(name = "fk_product_id"))
-    private Set<Product> products;
+    private List<Product> products;
 
     public Cart() {
-        products = new HashSet<>();
+        products = new ArrayList<>();
     }
 
-    public Cart(User user, Set<Product> products) {
+    public Cart(User user, List<Product> products) {
         this.user = user;
         this.products = products;
     }
@@ -51,11 +51,11 @@ public class Cart {
         this.user = user;
     }
 
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(Set<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 

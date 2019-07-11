@@ -1,5 +1,6 @@
 package com.bilichenko.mvc.testshop.controller;
 
+import com.bilichenko.mvc.testshop.model.Category;
 import com.bilichenko.mvc.testshop.model.Product;
 import com.bilichenko.mvc.testshop.service.CategoryService;
 import com.bilichenko.mvc.testshop.service.ProductService;
@@ -42,9 +43,13 @@ public class CategoryAndProductController {
         Product product = productService.getById(id).
                 orElseThrow(() -> new ProductNotFoundException());
         mav.addObject("product", product);
-        Long categoryId = product.getCategory().getId();
-        mav.addObject("category", categoryService.getById(categoryId).get());
+        mav.addObject("category", getCategoryOfProduct(product));
         mav.setViewName("product");
         return mav;
+    }
+
+    private Category getCategoryOfProduct(Product product) {
+        Long categoryId = product.getCategory().getId();
+        return categoryService.getById(categoryId).get();
     }
 }

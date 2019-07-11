@@ -3,26 +3,39 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
-    <title>Home Page</title>
+    <title>Categories</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+          crossorigin="anonymous">
 </head>
-<body>
-    <h1 class="">Good Company</h1>
-    <nav><a href="<c:url value="/welcome"/>">Welcome</a> | <a href="<c:url value="/categories"/>">Categories</a> |
-        <a href="<c:url value="/signin"/>">Signin</a> | <a href="<c:url value="/signup"/>">Signup</a> </nav>
+<body class="bg-light">
+<h1 class="">Good Company</h1>
+<nav><a href="<c:url value="/welcome"/>">Welcome</a> | <a href="<c:url value="/categories"/>">Categories</a> |
+    <security:authorize access="isAuthenticated() == false">
+        <a href="<c:url value="/signin"/>">Signin</a> | <a href="<c:url value="/signup"/>">Signup</a>
+    </security:authorize>
+</nav>
 
-    <div align="right">
-        <security:authorize access="isAuthenticated()">
-            logged as <security:authentication property="principal.username"/>
-        </security:authorize>
-    </div>
+<div align="right">
+    <security:authorize access="isAuthenticated()">
+        logged as <security:authentication property="principal.username"/> |
+        <a href="<c:url value="/cart"/>">CART</a> |
+        <a href="<c:url value="/logout"/>">Log out</a>
+    </security:authorize>
+</div>
 
-    <h2>Welcome</h2>
-    <div>Your are now on our home page. To navigate the site please use menu on the top...</div>
-    <br />
+<div class="text-center">
+    <h1 class="header">Welcome!</h1>
+    <p class="lead">Your are on the home page</p>
     <div>
-        Some another useful content...
+        <a href="<c:url value="/categories"/>">
+            <button class="btn btn-primary">Show our categories!</button>
+        </a>
     </div>
+</div>
+
+<%--date and time--%>
+<div align="right">${dateTime}</div>
+<%----%>
+
 </body>
 </html>

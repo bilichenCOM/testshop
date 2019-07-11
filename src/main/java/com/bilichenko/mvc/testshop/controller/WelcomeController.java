@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class WelcomeController {
 
-    @RequestMapping(value = {"/*", "/welcome"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public ModelAndView welcome(ModelAndView mav) {
         mav.setViewName("welcome");
         return mav;

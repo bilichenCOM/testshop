@@ -8,13 +8,25 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
-<body class="">
+<body class="bg-light">
 <h1 class="">Good Company</h1>
 <nav><a href="<c:url value="/welcome"/>">Welcome</a> | <a href="<c:url value="/categories"/>">Categories</a> |
-    <a href="<c:url value="/signin"/>">Signin</a> | <a href="<c:url value="/signup"/>">Signup</a> </nav>
+    <security:authorize access="isAuthenticated() == false">
+        <a href="<c:url value="/signin"/>">Signin</a> | <a href="<c:url value="/signup"/>">Signup</a>
+    </security:authorize>
+</nav>
+
+<div align="right">
+    <security:authorize access="isAuthenticated()">
+        logged as <security:authentication property="principal.username"/> |
+        <a href="<c:url value="/cart"/>">CART</a> |
+        <a href="<c:url value="/logout"/>">Log out</a>
+    </security:authorize>
+</div>
 
 <div>
-    <spring:form modelAttribute="user" action="/testshop/signup" method="post" class="form-signin">
+    <c:url value="/signup" var="post_url"/>
+    <spring:form modelAttribute="user" action="${post_url}" method="post" class="form-signin">
         <h1 class="h3 mb-3 font-weight-normal">New user</h1>
         <label for="name" class="sr-only">Full name</label>
         <spring:input path="name" id="name" class="form-control" placeholder="please enter your name" required="true" />
@@ -30,5 +42,10 @@
         <p class="mt-5 mb-3 text-muted">&copy; 2017-2019</p>
     </spring:form>
 </div>
+
+<%--date and time--%>
+<div align="right">${dateTime}</div>
+<%----%>
+
 </body>
 </html>
