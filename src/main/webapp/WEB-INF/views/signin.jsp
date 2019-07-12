@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
-<body>
+<body class="bg-light">
 <h1 class="">Good Company</h1>
 <nav><a href="<c:url value="/welcome"/>">Welcome</a> | <a href="<c:url value="/categories"/>">Categories</a> |
     <security:authorize access="isAuthenticated() == false">
@@ -17,15 +17,21 @@
     </security:authorize>
 </nav>
 
+<%--user info area--%>
 <div align="right">
     <security:authorize access="isAuthenticated()">
         logged as <security:authentication property="principal.username"/> |
-        <a href="<c:url value="/cart"/>">CART</a> |
-        <a href="<c:url value="/logout"/>">Log out</a>
+        <a href="<c:url value="/cart"/>">CART <c:if test="${cart.size() gt 0}">(${cart.size()} items)</c:if></a> |
+        <c:url value="/logout" var="logout_url"/>
+        <spring:form action="${logout_url}" method="post">
+            <button class="btn btn-outline-warn" type="submit">Logout</button>
+        </spring:form>
     </security:authorize>
 </div>
+<%----%>
+
 <div>
-    <c:url value="/purchase" var="post_url"/>
+    <c:url value="/signin" var="post_url"/>
     <spring:form modelAttribute="user" action="${post_url}" method="post" class="form-signin">
         <h1 class="h3 mb-3 font-weight-normal">Please login</h1>
         <span>${message}</span>

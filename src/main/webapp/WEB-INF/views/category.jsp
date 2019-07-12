@@ -15,13 +15,20 @@
     </security:authorize>
 </nav>
 
+<%--user info area--%>
 <div align="right">
     <security:authorize access="isAuthenticated()">
-        logged as <security:authentication property="principal.username"/> |
-        <a href="<c:url value="/cart"/>">CART</a> |
-        <a href="<c:url value="/logout"/>">Log out</a>
+        <nav>
+            logged as <security:authentication property="principal.username"/> |
+            <a href="<c:url value="/cart"/>">CART <c:if test="${cart.size() gt 0}">(${cart.size()} items)</c:if></a> |
+            <c:url value="/logout" var="logout_url"/>
+            <spring:form action="${logout_url}" align="right" method="post">
+                <button class="btn btn-danger" type="submit">Logout</button>
+            </spring:form>
+        </nav>
     </security:authorize>
 </div>
+<%----%>
 
 
 <h2><div class="text-uppercase">${category.name}</div></h2>

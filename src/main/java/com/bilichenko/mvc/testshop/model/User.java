@@ -35,7 +35,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "fk_role_id"))
     private List<Role> roles;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH},
+            orphanRemoval = true)
     @JoinColumn(name = "cart_id")
     private Cart cart;
 

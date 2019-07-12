@@ -15,17 +15,24 @@
     </security:authorize>
 </nav>
 
+<%--user info area--%>
 <div align="right">
     <security:authorize access="isAuthenticated()">
+        <nav>
             logged as <security:authentication property="principal.username"/> |
-            <a href="<c:url value="/cart"/>">CART</a> |
-            <a href="<c:url value="/logout"/>">Log out</a>
+            <a href="<c:url value="/cart"/>">CART<c:if test="${cart.size() gt 0}">(${cart.size()} items)</c:if></a> |
+            <c:url value="/logout" var="logout_url"/>
+            <spring:form action="${logout_url}" align="right" method="post">
+                <button class="btn btn-danger" type="submit">Logout</button>
+            </spring:form>
+        </nav>
     </security:authorize>
 </div>
+<%----%>
 
-<h2>Your cart items:</h2>
+<h2>Your cart ${cart.size()} items:</h2>
 <div class="text-info">${cartMessage}</div>
-<div class="text-info">${purchaseMessage}</div>
+<div class="text-success">${purchaseMessage}</div>
 <table>
     <c:forEach var="product" items="${cart.products}">
         <tr>
@@ -45,11 +52,16 @@
     </c:forEach>
 </table>
 
-<span class="h2">Total price:</span><div class="text-success">${cart.getTotalPrice()}&dollar;</div>
+<c:if test="${cart.size() gt 0}">
+    <span class="h2">Total price:</span><div class="text-success">${cart.totalPrice()}&dollar;</div>
 
-<a href="<c:url value="/purchase"/>">
-    <button class="btn btn-primary">Purchase all!</button>
-</a>
+    <a href="<c:url value="/purchase"/>">
+        <button class="btn btn-primary">Purchase all!</button>
+    </a>
+</c:if>
+<c:if test="${cart.size() eq 0}">
+    <h6 align="center">no items yet... go to <a href="<c:url value="/categories"/>">categories&gt;</a></h6>
+</c:if>
 
 <%--date and time--%>
 <div align="right">${dateTime}</div>

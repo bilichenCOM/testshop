@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 
 @Controller
@@ -34,13 +36,18 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public ModelAndView signup(ModelAndView mav) {
-        mav.addObject("user", new UserPayload());
+        mav.addObject("userPayload", new UserPayload());
         mav.setViewName("signup");
         return mav;
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public ModelAndView signin(@ModelAttribute("user") UserPayload userPayload, ModelAndView mav) {
+    public String signin(@ModelAttribute("userPayload") @Valid UserPayload userPayload,
+                               BindingResult bindingResult,
+                               ModelAndView mav) {
+        if (bindingResult.hasErrors()) {
+            return "signup";
+        }
         User user = User.ofPayload(userPayload);
         user.setPassword(encoder.encode(userPayload.getFirstPassword()));
         user.setBalance(0.0);
@@ -48,7 +55,6 @@ public class AuthenticationController {
         user.addRole(Role.ofUser());
 
         userService.save(user);
-        mav.setViewName("redirect:/signin");
-        return mav;
+        return "redirect:/signin";
     }
 }

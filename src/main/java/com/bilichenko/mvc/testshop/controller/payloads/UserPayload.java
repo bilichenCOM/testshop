@@ -1,9 +1,22 @@
 package com.bilichenko.mvc.testshop.controller.payloads;
 
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 public class UserPayload {
 
+    @Length(min = 2, max = 1000, message = "you should enter your real name")
     private String name;
+
+    @NotBlank(message = "email field is mandatory")
+    @Email(message = "please enter correct email")
     private String email;
+
+    @Pattern(regexp = "[a-zA-Z0-9]{6,47}",
+            message = "password should consists only from at least 6 latin letters or numbers")
     private String firstPassword;
     private String secondPassword;
 

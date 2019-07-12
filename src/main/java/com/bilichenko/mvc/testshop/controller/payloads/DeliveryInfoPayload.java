@@ -1,11 +1,28 @@
 package com.bilichenko.mvc.testshop.controller.payloads;
 
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 public class DeliveryInfoPayload {
+
+    @Length(min = 2, max = 1000, message = "please enter your firs name")
     private String firstName;
+
+    @Length(min = 2, max = 1000, message = "please enter your last name")
     private String lastName;
+
+    @NotBlank
     private String country;
+
+    @Length(min = 2, max = 100, message = "incorrect city name")
     private String city;
+
+    @Pattern(regexp = "(\\w+[\\s\\w]*,?\\s+\\d+)|(\\d+\\s*,?\\s+\\w+[\\w\\s]*)", message = "incorrect street name")
     private String street;
+
+    @Pattern(regexp = "\\d+", message = "incorrect zip-code")
     private String zip;
 
     public String getZip() {

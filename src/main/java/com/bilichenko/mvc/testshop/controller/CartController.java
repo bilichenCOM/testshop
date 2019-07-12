@@ -2,10 +2,8 @@ package com.bilichenko.mvc.testshop.controller;
 
 import com.bilichenko.mvc.testshop.model.Cart;
 import com.bilichenko.mvc.testshop.model.Product;
-import com.bilichenko.mvc.testshop.model.User;
 import com.bilichenko.mvc.testshop.service.CartService;
 import com.bilichenko.mvc.testshop.service.ProductService;
-import com.bilichenko.mvc.testshop.service.UserService;
 import com.bilichenko.mvc.testshop.service.exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,30 +11,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.security.Principal;
-
 @Controller
-@SessionAttributes("cart")
 public class CartController {
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private CartService cartService;
 
     @Autowired
     private ProductService productService;
-
-    @ModelAttribute("cart")
-    private Cart getCartOfPrincipal(Principal principal) {
-        User user = userService.getByEmail(principal.getName()).get();
-        return cartService.getById(user.getCart().getId()).get();
-    }
 
     @RequestMapping(value = "/cart", method = RequestMethod.GET)
     public ModelAndView cart(@ModelAttribute Cart cart, ModelAndView mav) {

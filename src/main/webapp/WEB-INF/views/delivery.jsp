@@ -27,13 +27,20 @@
     </security:authorize>
 </nav>
 
+<%--user info area--%>
 <div align="right">
     <security:authorize access="isAuthenticated()">
-        logged as <security:authentication property="principal.username"/> |
-        <a href="<c:url value="/cart"/>">CART</a> |
-        <a href="<c:url value="/logout"/>">Log out</a>
+        <nav>
+            logged as <security:authentication property="principal.username"/> |
+            <a href="<c:url value="/cart"/>">CART <c:if test="${cart.size() gt 0}">(${cart.size()} items)</c:if></a> |
+            <c:url value="/logout" var="logout_url"/>
+            <spring:form action="${logout_url}" align="right" method="post">
+                <button class="btn btn-danger" type="submit">Logout</button>
+            </spring:form>
+        </nav>
     </security:authorize>
 </div>
+<%----%>
 
 <div class="container">
     <table >
@@ -45,22 +52,28 @@
                     <span>${message}</span>
                     <label for="firstName">First name:</label>
                     <spring:input path="firstName" id="firstName" class="form-control"/>
+                    <spring:errors path="firstName" cssClass="alert alert-danger"/>
                     <label for="lastName">Last name:</label>
                     <spring:input path="lastName" id="lastName" class="form-control" />
+                    <spring:errors path="lastName" cssClass="alert alert-danger"/>
                     <label>Username: ${user.name}</label><br />
                     Email <div class="text-muted">${user.email}</div><br />
                     <label for="street">Street:</label>
                     <spring:input path="street" id="street" class="form-control" />
+                    <spring:errors path="street" cssClass="alert alert-danger"/>
                     <label for="city">City:</label>
                     <spring:input path="city" id="city" class="form-control" />
+                    <spring:errors path="city" cssClass="alert alert-danger"/>
                     <label for="country">Country:</label>
                     <spring:select path="country" id="country">
                         <spring:option value="none" label="Choose..."/>
                         <spring:option value="UA" label="Ukraine"/>
                         <spring:option value="EU" label="Other Europe"/>
                     </spring:select>
+                    <spring:errors path="country" cssClass="alert alert-danger"/>
                     <label for="zip">Zip:</label>
                     <spring:input path="zip" id="zip" class="form-control" />
+                    <spring:errors path="zip" cssClass="alert alert-danger"/>
                     <button class="btn btn-lg btn-success" type="submit">Confirm your order!</button>
                     <p class="mt-5 mb-3 text-muted">&copy; 2017-2019</p>
                 </spring:form>

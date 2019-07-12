@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <title>Categories</title>
@@ -15,13 +16,20 @@
     </security:authorize>
 </nav>
 
+<%--user info area--%>
 <div align="right">
     <security:authorize access="isAuthenticated()">
-        logged as <security:authentication property="principal.username"/> |
-        <a href="<c:url value="/cart"/>">CART</a> |
-        <a href="<c:url value="/logout"/>">Log out</a>
+        <nav>
+            logged as <security:authentication property="principal.username"/> |
+            <a href="<c:url value="/cart"/>">CART <c:if test="${cart.size() gt 0}">(${cart.size()} items)</c:if></a> |
+            <c:url value="/logout" var="logout_url"/>
+            <spring:form action="${logout_url}" align="right" method="post">
+                <button class="btn btn-danger" type="submit">Logout</button>
+            </spring:form>
+        </nav>
     </security:authorize>
 </div>
+<%----%>
 
 
 <h2>Categories</h2>

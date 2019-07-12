@@ -20,7 +20,7 @@ public class Cart {
     @OneToOne(mappedBy = "cart")
     private User user;
 
-    @ManyToMany(cascade = CascadeType.DETACH)
+    @ManyToMany(cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
     @JoinTable(name = "carts_products",
             joinColumns = @JoinColumn(name = "fk_cart_id"),
             inverseJoinColumns = @JoinColumn(name = "fk_product_id"))
@@ -67,11 +67,15 @@ public class Cart {
         this.products.remove(product);
     }
 
-    public Double getTotalPrice() {
+    public double totalPrice() {
         return this.products.stream()
                 .map(p -> p.getPrice())
                 .reduce((pr1, pr2) -> pr1 + pr2)
                 .orElse(0.0);
+    }
+
+    public int size() {
+        return products.size();
     }
 
     @Override

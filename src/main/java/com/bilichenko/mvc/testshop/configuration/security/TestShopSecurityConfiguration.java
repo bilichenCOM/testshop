@@ -41,7 +41,13 @@ public class TestShopSecurityConfiguration extends WebSecurityConfigurerAdapter 
             .formLogin().loginPage("/signin")
                 .usernameParameter("email")
                 .permitAll()
-                .defaultSuccessUrl("/categories");
+                .defaultSuccessUrl("/welcome")
+                .and()
+            .logout().logoutUrl("/logout")
+                .permitAll()
+                .logoutSuccessUrl("/welcome")
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true);
     }
 
     @Autowired
