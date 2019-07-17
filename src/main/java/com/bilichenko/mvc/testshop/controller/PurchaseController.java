@@ -5,6 +5,7 @@ import com.bilichenko.mvc.testshop.model.Cart;
 import com.bilichenko.mvc.testshop.model.PurchasedDeliveryItem;
 import com.bilichenko.mvc.testshop.model.User;
 import com.bilichenko.mvc.testshop.service.CartService;
+import com.bilichenko.mvc.testshop.service.MailService;
 import com.bilichenko.mvc.testshop.service.PurchasedDeliveryItemService;
 import com.bilichenko.mvc.testshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class PurchaseController {
     @Autowired
     private PurchasedDeliveryItemService pdiService;
 
+    @Autowired
+    private MailService mailService;
+
     @RequestMapping(value = "/purchase", method = RequestMethod.GET)
     public ModelAndView purchase(ModelAndView mav) {
         mav.addObject("dip", new DeliveryInfoPayload());
@@ -47,6 +51,8 @@ public class PurchaseController {
         user.setCart(new Cart());
         userService.update(user);
 
+        mailService.sendMessage(user.getEmail(), "Purchase confirmation",
+                String.format("Your purchase with id %s is confirmed.", pdi.getId()));
         redirectAttributes.addFlashAttribute("purchaseMessage",
                 String.format("success! to confirm your order (id %s) please check your inbox %s",
                         pdi.getId(), user.getEmail()));
