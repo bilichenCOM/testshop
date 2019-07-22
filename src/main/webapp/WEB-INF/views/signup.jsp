@@ -43,7 +43,7 @@
         <spring:input path="email" id="email" class="form-control" placeholder="your email"/>
         <spring:errors path="email" cssClass="alert alert-danger"/>
         <label for="firstPassword" class="sr-only">Password</label>
-        <spring:input path="firstPassword" id="firstPassword" class="form-control" placeholder="your password"/>
+        <spring:input path="firstPassword" type="password" id="firstPassword" class="form-control" placeholder="your password"/>
         <spring:errors path="firstPassword" cssClass="alert alert-danger"/>
         <button class="btn btn-lg btn-success" type="submit">Sign up</button>
         <p class="mt-5 mb-3 text-muted">&copy; 2017-2019</p>
